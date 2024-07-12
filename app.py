@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 from PIL import Image, ImageOps
 from tensorflow.keras.models import load_model
+from tensorflow.keras.layers import DepthwiseConv2D
 from streamlit_lottie import st_lottie
 import requests
 import os
@@ -17,7 +18,7 @@ def load_lottieurl(url: str):
 lottie_animation = load_lottieurl("https://assets2.lottiefiles.com/packages/lf20_yadoe3im.json")
 
 # Load the model and labels
-model_path = "keras_model.h5"
+model_path = "keras_Model.h5"
 labels_path = "labels.txt"
 
 if not os.path.exists(model_path):
@@ -28,7 +29,12 @@ if not os.path.exists(labels_path):
     st.error(f"Labels file not found: {labels_path}")
     st.stop()
 
-model = load_model(model_path, compile=False)
+# Custom objects dictionary
+custom_objects = {
+    'DepthwiseConv2D': DepthwiseConv2D
+}
+
+model = load_model(model_path, custom_objects=custom_objects, compile=False)
 class_names = open(labels_path, "r").readlines()
 
 # Function to preprocess the image
