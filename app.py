@@ -6,7 +6,7 @@ from streamlit_lottie import st_lottie
 import requests
 
 # Load the model and labels
-model = load_model("keras_Model.h5", compile=False)
+model = load_model("keras_model.h5", compile=False)
 class_names = open("labels.txt", "r").readlines()
 
 # Function to preprocess the image
