@@ -1,4 +1,6 @@
 streamlit
-streamlit-lottie
+numpy
+Pillow
 tensorflow
-pillow
+streamlit-lottie
+requests
