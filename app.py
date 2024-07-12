@@ -4,10 +4,32 @@ from PIL import Image, ImageOps
 from tensorflow.keras.models import load_model
 from streamlit_lottie import st_lottie
 import requests
+import os
+
+# Function to load Lottie animation
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# Load a Lottie animation
+lottie_animation = load_lottieurl("https://assets2.lottiefiles.com/packages/lf20_yadoe3im.json")
 
 # Load the model and labels
-model = load_model("keras_model.h5", compile=False)
-class_names = open("labels.txt", "r").readlines()
+model_path = "keras_model.h5"
+labels_path = "labels.txt"
+
+if not os.path.exists(model_path):
+    st.error(f"Model file not found: {model_path}")
+    st.stop()
+
+if not os.path.exists(labels_path):
+    st.error(f"Labels file not found: {labels_path}")
+    st.stop()
+
+model = load_model(model_path, compile=False)
+class_names = open(labels_path, "r").readlines()
 
 # Function to preprocess the image
 def preprocess_image(image):
@@ -27,16 +49,6 @@ def predict_emotion(image):
     class_name = class_names[index]
     confidence_score = prediction[0][index]
     return class_name[2:].strip(), confidence_score
-
-# Function to load Lottie animation
-def load_lottieurl(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
-
-# Load a Lottie animation
-lottie_animation = load_lottieurl("https://assets2.lottiefiles.com/packages/lf20_yadoe3im.json")
 
 # Streamlit app
 st.title("HISI - Emotion Detection")
