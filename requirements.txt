@@ -1,4 +1,7 @@
-streamlit
+streamlit==1.12.0
+tensorflow==2.9.1
 pillow
 numpy
-tensorflow
+streamlit-lottie
+requests
+
